@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class HeroCharacterController : MonoBehaviour
 {
@@ -13,12 +14,16 @@ public class HeroCharacterController : MonoBehaviour
     private Vector3 velocity;
     private bool isGrounded;
     private float horizontalInput;
+
+    public static int totalCoins;
     
 
     // Start is called before the first frame update
     void Start()
     {
+        totalCoins = 0;
         cC = GetComponent<CharacterController>();
+
     }
 
     // Update is called once per frame
@@ -50,4 +55,20 @@ public class HeroCharacterController : MonoBehaviour
 
         cC.Move(velocity * Time.deltaTime);
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("DropZone"))
+        {
+            SceneManager.LoadScene("SampleScene");
+        }
+
+        if (other.gameObject.tag == "Coin")
+        {
+            totalCoins += 1;
+            Debug.Log(totalCoins);
+            Destroy(other.gameObject);
+        }
+    }
+
 }
