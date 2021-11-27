@@ -8,6 +8,8 @@ public class HeroCharacterController : MonoBehaviour
     [SerializeField] LayerMask groundLayer;
     [SerializeField] private float speed;
     [SerializeField] private float jump;
+    [SerializeField] private Transform[] groundChecks;
+    [SerializeField] private Transform[] wallChecks;
 
     private float gravity = -50f;
     private CharacterController cC;
@@ -34,7 +36,16 @@ public class HeroCharacterController : MonoBehaviour
 
         transform.forward = new Vector3(horizontalInput, 0, Mathf.Abs(horizontalInput) - 1);
 
-        isGrounded = Physics.CheckSphere(transform.position, 0.1f, groundLayer, QueryTriggerInteraction.Ignore);
+        isGrounded = false;
+
+        foreach(var groundCheck in groundChecks)
+        { 
+            if(Physics.CheckSphere(groundCheck.position, 0.1f, groundLayer, QueryTriggerInteraction.Ignore))
+            {
+                isGrounded = true;
+                break;
+            }
+        }
 
         if(isGrounded && velocity.y < 0)
         {
@@ -46,12 +57,25 @@ public class HeroCharacterController : MonoBehaviour
             velocity.y += gravity * Time.deltaTime;
         }
 
+        var blocked = false;
+        foreach(var wallCheck in wallChecks)
+        {
+            if (Physics.CheckSphere(wallCheck.position, 0.1f, groundLayer, QueryTriggerInteraction.Ignore))
+            {
+                blocked = true;
+                break;
+            }
+        }
+
+        if (!blocked)
+        {
+            cC.Move(new Vector3(horizontalInput * speed, 0, 0) * Time.deltaTime);
+        }
+
         if(isGrounded && Input.GetButtonDown("Jump"))
         {
             velocity.y += Mathf.Sqrt(jump * -2 * gravity);
         }
-
-        cC.Move(new Vector3(horizontalInput * speed, 0, 0) * Time.deltaTime);
 
         cC.Move(velocity * Time.deltaTime);
     }
