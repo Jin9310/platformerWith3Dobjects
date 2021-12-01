@@ -13,19 +13,22 @@ public class HeroCharacterController : MonoBehaviour
 
     private float gravity = -50f;
     private CharacterController cC;
+    private Animator anim;
     private Vector3 velocity;
     private bool isGrounded;
     private float horizontalInput;
 
     public static int totalCoins;
-    
+
+
+    public GameObject level1;
 
     // Start is called before the first frame update
     void Start()
     {
         totalCoins = 0;
         cC = GetComponent<CharacterController>();
-
+        anim = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -34,7 +37,7 @@ public class HeroCharacterController : MonoBehaviour
 
         horizontalInput = 1;
 
-        transform.forward = new Vector3(horizontalInput, 0, Mathf.Abs(horizontalInput) - 1);
+        //transform.forward = new Vector3(horizontalInput, 0, Mathf.Abs(horizontalInput) - 1);
 
         isGrounded = false;
 
@@ -78,6 +81,12 @@ public class HeroCharacterController : MonoBehaviour
         }
 
         cC.Move(velocity * Time.deltaTime);
+
+        anim.SetFloat("Speed", horizontalInput);
+
+        anim.SetBool("IsGrounded", isGrounded);
+
+        anim.SetFloat("VerticalSpeed", velocity.y);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -92,6 +101,11 @@ public class HeroCharacterController : MonoBehaviour
             totalCoins += 1;
             Debug.Log(totalCoins);
             Destroy(other.gameObject);
+        }
+
+        if (other.CompareTag("Generator"))
+        {
+            Instantiate(level1, new Vector3(transform.position.x + 18, transform.position.y - 1.2f, transform.position.z), Quaternion.identity);
         }
     }
 
