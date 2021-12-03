@@ -14,6 +14,7 @@ public class GenerateTrigger : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            //Debug.Log("construct");
             var rand = Random.Range(0, levelCollection.Length);
 
             Instantiate(levelCollection[rand], new Vector3(transform.position.x + xGenerateLevel, transform.position.y + yGenerateLevel, transform.position.z + zGenerateLevel), Quaternion.identity);
