@@ -8,6 +8,7 @@ public class HeroCharacterController : MonoBehaviour
     [SerializeField] LayerMask groundLayer;
     [SerializeField] private float speed;
     [SerializeField] private float jump;
+    //[SerializeField] private float xGenerateLevel;
     [SerializeField] private Transform[] groundChecks;
     [SerializeField] private Transform[] wallChecks;
 
@@ -21,7 +22,7 @@ public class HeroCharacterController : MonoBehaviour
     public static int totalCoins;
 
 
-    public GameObject level1;
+    //public GameObject level1;
 
     // Start is called before the first frame update
     void Start()
@@ -102,11 +103,11 @@ public class HeroCharacterController : MonoBehaviour
             Debug.Log(totalCoins);
             Destroy(other.gameObject);
         }
-
+        /*
         if (other.CompareTag("Generator"))
         {
-            Instantiate(level1, new Vector3(transform.position.x + 18, transform.position.y - 1.2f, transform.position.z), Quaternion.identity);
-        }
+            Instantiate(level1, new Vector3(transform.position.x + xGenerateLevel, transform.position.y - 1.2f, transform.position.z), Quaternion.identity);
+        }*/
     }
 
 }
